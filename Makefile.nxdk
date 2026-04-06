@@ -1,0 +1,36 @@
+XBE_NAME = ioq3ded
+GEN_XISO = $(XBE_NAME).iso
+
+# Compiler flags
+CONF_FLAGS += -DNXDK -D__NXDK__ -DSERVERONLY
+CONF_FLAGS += -I$(NXDK_DIR)/lib/nxdk/include -I$(NXDK_DIR)/lib/sdl/SDL2/include
+
+# Core Source Files
+SRCS += \
+	$(CURDIR)/code/qcommon/cm_load.c \
+	$(CURDIR)/code/qcommon/cm_patch.c \
+	$(CURDIR)/code/qcommon/cm_polylib.c \
+	$(CURDIR)/code/qcommon/cm_test.c \
+	$(CURDIR)/code/qcommon/cm_trace.c \
+	$(CURDIR)/code/qcommon/common.c \
+	$(CURDIR)/code/qcommon/cvar.c \
+	$(CURDIR)/code/qcommon/files.c \
+	$(CURDIR)/code/qcommon/md4.c \
+	$(CURDIR)/code/qcommon/msg.c \
+	$(CURDIR)/code/qcommon/net_chan.c \
+	$(CURDIR)/code/qcommon/huffman.c \
+	$(CURDIR)/code/server/sv_bot.c \
+	$(CURDIR)/code/server/sv_client.c \
+	$(CURDIR)/code/server/sv_ccmds.c \
+	$(CURDIR)/code/server/sv_game.c \
+	$(CURDIR)/code/server/sv_init.c \
+	$(CURDIR)/code/server/sv_main.c \
+	$(CURDIR)/code/server/sv_net_chan.c \
+	$(CURDIR)/code/server/sv_snapshot.c \
+	$(CURDIR)/code/server/sv_world.c \
+	$(CURDIR)/code/null/null_client.c \
+	$(CURDIR)/code/null/null_input.c \
+	$(CURDIR)/code/null/null_snddma.c \
+	$(CURDIR)/code/sys/sys_xbox.c
+
+include $(NXDK_DIR)/Makefile
