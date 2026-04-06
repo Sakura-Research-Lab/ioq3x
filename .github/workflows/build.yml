@@ -17,6 +17,28 @@ jobs:
         echo "VERSION: ${VERSION}"
         echo "result=${VERSION}" >> $GITHUB_OUTPUT
 
+  xbox:
+    name: Xbox (NXDK)
+    runs-on: ubuntu-latest
+    container:
+      image: nxdk/nxdk:latest
+    needs: version
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        submodules: recursive
+    - name: Compile for Xbox
+      run: |
+        export NXDK_DIR=/nxdk
+        make -f Makefile.nxdk
+    - name: Upload
+      uses: actions/upload-artifact@v4
+      with:
+        name: ${{ github.event.repository.name }}-xbox-${{ needs.version.outputs.version }}
+        path: |
+          *.xbe
+          *.iso
+
   linux:
     name: Linux
     runs-on: ubuntu-22.04
