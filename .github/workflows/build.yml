@@ -17,27 +17,38 @@ jobs:
         echo "VERSION: ${VERSION}"
         echo "result=${VERSION}" >> $GITHUB_OUTPUT
 
-  xbox:
-    name: Xbox (NXDK)
+xbox:
+    name: Original Xbox
     runs-on: ubuntu-latest
-    container:
-      image: nxdk/nxdk:latest
     needs: version
     steps:
-    - uses: actions/checkout@v4
-      with:
-        submodules: recursive
-    - name: Compile for Xbox
-      run: |
-        export NXDK_DIR=/nxdk
-        make -f Makefile.nxdk
-    - name: Upload
-      uses: actions/upload-artifact@v4
-      with:
-        name: ${{ github.event.repository.name }}-xbox-${{ needs.version.outputs.version }}
-        path: |
-          *.xbe
-          *.iso
+      - name: Checkout Code
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: Install Compilers
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y clang lld llvm make python3
+
+      - name: Clone Official NXDK
+        run: git clone --recursive https://github.com/XboxDev/nxdk.git nxdk
+
+      - name: Compile ioq3ded
+        run: |
+          export NXDK_DIR=$(pwd)/nxdk
+          export PATH=$NXDK_DIR/bin:$PATH
+          # Ensure we use your specific Xbox Makefile
+          make -f Makefile.nxdk
+
+      - name: Upload Xbox Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ github.event.repository.name }}-xbox-${{ needs.version.outputs.version }}
+          path: |
+            **/*.xbe
+            **/*.iso
 
   check-is-release:
     if: github.event_name != 'pull_request'
